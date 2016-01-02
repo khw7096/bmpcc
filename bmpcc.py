@@ -4,7 +4,7 @@ import time
 import tui
 import sys
 
-ROOT = "%s/project" % (os.path.expanduser('~')
+ROOT = "%s/project" % (os.path.expanduser('~'))
 
 class eat:
 	MT_POINT = ""
