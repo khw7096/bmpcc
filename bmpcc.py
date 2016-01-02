@@ -4,6 +4,8 @@ import time
 import tui
 import sys
 
+ROOT = "%s/project" % (os.path.expanduser('~')
+
 class eat:
 	MT_POINT = ""
 	PROJECT = ""
@@ -48,7 +50,7 @@ class eat:
 			exit()
 	
 	def select_project(self):
-		projectlist = os.listdir("%s/lazypic/show" % (os.path.expanduser('~')))
+		projectlist = os.listdir(ROOT)
 		menunum = 1
 		rmlist = []
 		for i in projectlist:
@@ -76,7 +78,7 @@ class eat:
 
 	def copy(self):
 		copylist = []
-		self.INpath = "%s/lazypic/show/%s/product/in/%s" % (os.path.expanduser("~"), self.PROJECT, time.strftime('%y%m%d'))
+		self.INpath = "%s/%s/product/in/%s" % (ROOT, self.PROJECT, time.strftime('%y%m%d'))
 		try:
 			if self.HW == "bmpcc":
 				os.system("mkdir -p %s" % (self.INpath))
