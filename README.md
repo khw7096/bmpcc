@@ -9,6 +9,9 @@
 ## lens info.
 - Panasonic 20mm f1.7 AOV -> 57.6mm(20 * 2.88)
 
+## DNG Profile Manager
+- http://xritephoto.com/ph_product_overview.aspx?ID=1257&Action=Support&SoftwareID=1345&catid=28
+
 ## need.
 - ND filter for Daylight.
 
