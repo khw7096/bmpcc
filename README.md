@@ -4,7 +4,8 @@
 ## camera info.
 - CCD size : 12.48 x 7.02mm
 - Crop value : 2.88
-- Audio Cable : 1/8-inch Stereo Audio Cable <-> Zoom H1
+- Audio Cable : FiiO L2 Audio Cable(PCOCC-A)
+
 
 ## lens info.
 - Panasonic 20mm f1.7 AOV -> 57.6mm(20 * 2.88)
