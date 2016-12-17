@@ -21,3 +21,14 @@
 
 ## software download.
 - https://www.blackmagicdesign.com/support/family/professional-cameras
+
+## 렌탈/소모품 정보
+#### 그린촬영시스템(방배동)
+- 그린촬영시스템 : http://map.naver.com/?query=그린촬영시스템&type=SITE_1&siteOrder=
+- Homepage : http://www.greenshop.co.kr/main/index
+
+#### 한렌탈(신사동)
+- http://hanent.com
+
+#### 진렌탈(신사동)
+- http://www.jinrental.net
