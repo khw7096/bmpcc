@@ -8,7 +8,9 @@
 
 
 ## lens info.
-- Panasonic 20mm f1.7 AOV -> 57.6mm(20 * 2.88)
+- Panasonic Lumix 20mm f1.7 AOV -> 20mm(57.6mm)
+- Olympus 7-14mm f/2.8 Pro M.Zuiko Digita ED -> 7-14m(20.16 - 40.32mm)
+
 
 ## DNG Profile Manager
 - http://xritephoto.com/ph_product_overview.aspx?ID=1257&Action=Support&SoftwareID=1345&catid=28
