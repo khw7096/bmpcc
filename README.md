@@ -24,9 +24,10 @@
 ## software download.
 - https://www.blackmagicdesign.com/support/family/professional-cameras
 
-## Davinci Resolve 
+## Davinci Resolve & ColorChart
 - http://www.tangentwave.co.uk/product/element-vs/
 - Ipad App : element-Vs
+- ColorChecker Passport : http://xritephoto.com/colorchecker-passport-photo
 
 ## 렌탈/소모품 정보
 #### 그린촬영시스템(방배동)
