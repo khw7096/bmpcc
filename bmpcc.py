@@ -1,8 +1,9 @@
 # coding: utf-8
 import os
 import time
-import tui
+from cmdprocessbar import *
 import sys
+import shutil
 
 ROOT = "%s/onsetdata" % (os.path.expanduser('~'))
 
@@ -54,29 +55,26 @@ class Onsetcopy:
 	def isCopy(self):
 		answercopy = raw_input("Copy SD to HDD ?(y/n) : ")
 		if answercopy in ['y', 'Y']:
-			return 1
+			return True
 		else:
+			print("Copy cancelled.")
 			exit()
 	
 	def selectProject(self):
-		projectlist = os.listdir(ROOT)
-		menunum = 1
-		rmlist = []
-		for i in projectlist:
-			if i[0] != ".":
-				print "%s. %s" % (menunum, i)
-				menunum = menunum + 1
-			else:
-				rmlist.append(i)
+		menuInitNum = 1
+		projects = []
+		for i in os.listdir(ROOT):
+			if i.startswith("."):
+				continue
+			if not os.path.isdir("%s/%s" % (ROOT, i)):
+				continue
+			print "%s. %s" % (menuInitNum, i)
+			projects.append(i)
+			menuInitNum += 1
 
-		#remove except list
-		for j in rmlist:
-			projectlist.remove(j)
-
-		projectnum = raw_input("Select Project(q:quit) : ")
-		self.PROJECT = projectlist[int(projectnum) - 1]
+		selectnum = raw_input("Select Project(q:quit) : ")
+		self.PROJECT = projects[int(selectnum) - 1]
 		print "Select -> %s" % (self.PROJECT)
-	
 
 	def isRmSDcard(self):
 		"""
@@ -99,21 +97,21 @@ class Onsetcopy:
 					copylist.append("cp -f /Volumes/bmpcc/%s %s" % (i, self.INpath))
 				else:
 					pass
-			tui.os_run_status(copylist)
+			cmdProcessBar(copylist)
 		elif self.HW == "zoom":
 			filelist = os.listdir("/Volumes/ZOOM/STEREO/FOLDER01")
 			for i in filelist:
 				if os.path.splitext(i)[-1].lower() in [".mp3",".wav"]: # proresHQ로만 촬영합니다.
-					copylist.append("cp -f /Volumes/ZOOM/STEREO/FOLDER01/%s %s/sound" % (i, self.INpath))
+					copylist.append("cp -f /Volumes/ZOOM/STEREO/FOLDER01/%s %s" % (i, self.INpath))
 				else:
 					pass
-			tui.os_run_status(copylist)
+			cmdProcessBar(copylist)
 		else:
 			pass
 
-	def rmsd(self):
+	def rmSD(self):
 		if self.isitRM:
-			os.system("rm -rf %s/*" % (self.MT_POINT))
+			shutil.rmtree(self.MT_POINT)
 	
 	def openFolder(self):
 		os.system("open %s" % (self.INpath)) 
@@ -128,7 +126,7 @@ def main():
 		foo.selectProject()
 		foo.isRmSDcard()
 		foo.copy()
-		foo.rmsd()
+		foo.rmSD()
 		foo.openFolder()
 		print "copy done."
 
