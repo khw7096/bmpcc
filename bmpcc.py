@@ -1,24 +1,27 @@
-# -*- coding: utf-8 -*-
+# coding: utf-8
 import os
 import time
 import tui
 import sys
 
-ROOT = "%s/show" % (os.path.expanduser('~'))
+ROOT = "%s/onsetdata" % (os.path.expanduser('~'))
 
-class eat:
+class Onsetcopy:
 	MT_POINT = ""
 	PROJECT = ""
 	SEQ = ""
-	isitRM = 0
+	isitRM = False
 	INpath = ""
 	HW = ""
 
-	def get_mountpoint(self):
-		if os.path.isdir("/Volumes/camsd"): #bmpcc
-			self.MT_POINT = "/Volumes/camsd"
+	def setHwAndMountpoint(self):
+		"""
+		메모리가 장착되었을 때 사용된 하드웨어, 마운트포인트를 설정한다.
+		"""
+		if os.path.isdir("/Volumes/bmpcc"): #bmpcc
+			self.MT_POINT = "/Volumes/bmpcc"
 			self.HW = "bmpcc"
-		elif os.path.isdir("/Volumes/ZOOM"):
+		elif os.path.isdir("/Volumes/ZOOM"): # zoom h1 audio
 			self.MT_POINT = "/Volumes/ZOOM"
 			self.HW = "zoom"
 		elif os.path.isdir("/Volumes/noname"): #gopro defalut value
@@ -29,27 +32,33 @@ class eat:
 			sys.exit(0)
 		print "   Detect %s" % (self.HW)
 
-	def diskfree(self):
+	def printFreeSpace(self):
+		"""
+		현재 하드디스크 남아있는 용량을 출력한다.
+		"""
 		s = os.statvfs('/') #mount name
 		free = (s.f_bavail * s.f_frsize) / 1024 / 1024 / 1024 #k,m,g byte.
 		print "   Disk size : %04s G" % (free)
 
-	def diskuse(self):
+	def printUsedSpace(self):
+		"""
+		메모리카드 내부 복사될 용량을 출력한다.
+		"""
 		s = os.statvfs(self.MT_POINT)
 		use = (s.f_blocks - s.f_bfree) * s.f_frsize / 1024 / 1024 / 1024.0
 		print  "     SD size : %04s G" % (str(use)[0:4])
 
-	def intro(self):
-		print "=== SD DATA Managing System ==="
+	def title(self):
+		print "=== Onset Data Copy Managing System ==="
 
-	def ask_copy(self):
+	def isCopy(self):
 		answercopy = raw_input("Copy SD to HDD ?(y/n) : ")
 		if answercopy in ['y', 'Y']:
 			return 1
 		else:
 			exit()
 	
-	def select_project(self):
+	def selectProject(self):
 		projectlist = os.listdir(ROOT)
 		menunum = 1
 		rmlist = []
@@ -69,68 +78,59 @@ class eat:
 		print "Select -> %s" % (self.PROJECT)
 	
 
-	def askrmsd(self):
+	def isRmSDcard(self):
+		"""
+		복사가 끝나고 메모리를 삭제할지 물어본다.
+		"""
 		isitrmsd = raw_input("remove SD card(y/n) : ")
 		if isitrmsd in ["Y", "y"]:
-			self.isitRM = 1
-		else:
-			self.isitRM = 0
+			self.isitRM = True
 
 	def copy(self):
 		copylist = []
-		self.INpath = "%s/%s/product/in/%s" % (ROOT, self.PROJECT, time.strftime('%y%m%d'))
-		try:
-			if self.HW == "bmpcc":
-				os.system("mkdir -p %s" % (self.INpath))
-			elif self.HW == "zoom":
-				os.system("mkdir -p %s/sound" % (self.INpath))
-			else:
-				pass
-		except:
-			pass
+		self.INpath = "%s/%s/%s/%s" % (ROOT, self.PROJECT, time.strftime('%y%m%d'), self.HW)
+		if not os.path.exists(self.INpath):
+			os.makedirs(self.INpath)
 		#make copy list
-		try:
-			if self.HW == "bmpcc":
-				filelist = os.listdir("/Volumes/camsd")
-				for i in filelist:
-					if i[-3:] == "mov":
-						copylist.append("cp -f /Volumes/camsd/%s %s" % (i, self.INpath))
-					else:
-						pass
-				tui.os_run_status(copylist)
-			elif self.HW == "zoom":
-				filelist = os.listdir("/Volumes/ZOOM/STEREO/FOLDER01")
-				for i in filelist:
-					if i[-3:] == "MP3":
-						copylist.append("cp -f /Volumes/ZOOM/STEREO/FOLDER01/%s %s/sound" % (i, self.INpath))
-					else:
-						pass
-				tui.os_run_status(copylist)
-			else:
-				pass
-		except:
-			print "check connect SDcard."
-			sys.exit(1)
+		if self.HW == "bmpcc":
+			filelist = os.listdir("/Volumes/bmpcc")
+			for i in filelist:
+				if os.path.splitext(i)[-1].lower() == ".mov": # proresHQ로만 촬영합니다.
+					copylist.append("cp -f /Volumes/bmpcc/%s %s" % (i, self.INpath))
+				else:
+					pass
+			tui.os_run_status(copylist)
+		elif self.HW == "zoom":
+			filelist = os.listdir("/Volumes/ZOOM/STEREO/FOLDER01")
+			for i in filelist:
+				if os.path.splitext(i)[-1].lower() in [".mp3",".wav"]: # proresHQ로만 촬영합니다.
+					copylist.append("cp -f /Volumes/ZOOM/STEREO/FOLDER01/%s %s/sound" % (i, self.INpath))
+				else:
+					pass
+			tui.os_run_status(copylist)
+		else:
+			pass
+
 	def rmsd(self):
 		if self.isitRM:
 			os.system("rm -rf %s/*" % (self.MT_POINT))
 	
-	def openfolder(self):
+	def openFolder(self):
 		os.system("open %s" % (self.INpath)) 
 
 def main():
-	foo = eat()
-	foo.intro()
-	foo.get_mountpoint() #get sdcard mountpoint
-	foo.diskfree()
-	foo.diskuse()
-	if foo.ask_copy():
-		foo.select_project()
-		foo.askrmsd()
+	foo = Onsetcopy()
+	foo.title()
+	foo.setHwAndMountpoint() #get sdcard mountpoint
+	foo.printFreeSpace()
+	foo.printUsedSpace()
+	if foo.isCopy():
+		foo.selectProject()
+		foo.isRmSDcard()
 		foo.copy()
 		foo.rmsd()
-		foo.openfolder()
-		print "Enjoy work~~~!!! yo~~!"
+		foo.openFolder()
+		print "copy done."
 
 if __name__ == "__main__":
 	main()
