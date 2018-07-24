@@ -3,7 +3,6 @@ import os
 import time
 from cmdprocessbar import *
 import sys
-import shutil
 
 ROOT = "%s/onsetdata" % (os.path.expanduser('~'))
 
@@ -73,6 +72,8 @@ class Onsetcopy:
 			menuInitNum += 1
 
 		selectnum = raw_input("Select Project(q:quit) : ")
+		if selectnum.lower() == "q":
+			exit()
 		self.PROJECT = projects[int(selectnum) - 1]
 		print "Select -> %s" % (self.PROJECT)
 
@@ -111,7 +112,7 @@ class Onsetcopy:
 
 	def rmSD(self):
 		if self.isitRM:
-			shutil.rmtree(self.MT_POINT)
+			os.system("rm -rf %s" % (self.MT_POINT))
 	
 	def openFolder(self):
 		os.system("open %s" % (self.INpath)) 
