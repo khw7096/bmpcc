@@ -18,6 +18,10 @@
 ## need.
 - ND filter for Daylight.
 
+## Link SW
+- OBS Studio: https://obsproject.com
+- OBS Studio Compile:  https://obsproject.com/wiki/install-instructions#linux
+
 ## blender lens option.
 ![alt blender_op](https://raw.githubusercontent.com/khw7096/bmpcc/master/lensdist/blender_lensdisto.png)
 
